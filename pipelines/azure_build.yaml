@@ -31,15 +31,23 @@ stages:
       inputs:
         script: |
           npm run build
-    - task: AzureFileCopy@2
-      displayName: Deploy Files
+    
+    - task: CmdLine@2
+      displayName: install az-cli
       inputs:
-        SourcePath: '$(System.DefaultWorkingDirectory)\dist\$(Build.Repository.Name)'
-        azureSubscription: $(serviceConnection)
-        Destination: 'AzureBlob'
-        storage: $(storageContainer)
-        ContainerName: '$web'
-        BlobPrefix: ''
+        script: |
+          curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+          az --version
+
+    # - task: AzureFileCopy@2
+    #   displayName: Deploy Files
+    #   inputs:
+    #     SourcePath: '$(System.DefaultWorkingDirectory)\dist\$(Build.Repository.Name)'
+    #     azureSubscription: $(serviceConnection)
+    #     Destination: 'AzureBlob'
+    #     storage: $(storageContainer)
+    #     ContainerName: '$web'
+    #     BlobPrefix: ''
     # - task: AzureCLI@2
     #   displayName: Delete Old Files
     #   inputs:
