@@ -12,16 +12,22 @@ stages:
   jobs:
   - job: Job
     pool:
-      vmImage: windows-latest
+      vmImage: ubuntu-latest
     steps:
     - task: NodeTool@0
       inputs:
         versionSpec: '22.0.0'
         force32bit: false
+        displayName: 'Install Node.js'
+  # - task: NodeTool@0
+  #   inputs:
+  #     versionSpec: '10.x'
+  #     displayName: 'Install Node.js'
     - task: CmdLine@2
       displayName: npm install
       inputs:
         script: |
+          npm install -g @angular/cli
           npm install
     - task: CmdLine@2
       displayName: ng build
