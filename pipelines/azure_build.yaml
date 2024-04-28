@@ -23,6 +23,7 @@ stages:
       displayName: npm install
       inputs:
         script: |
+          npm config set legacy-peer-deps true
           npm install -g @angular/cli
           npm install
     # - task: CmdLine@2
