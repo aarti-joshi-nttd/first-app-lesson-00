@@ -1,16 +1,17 @@
 variables:
 - name: storageContainer
   value: launchstorage1905692099
-- name: subscription
-  value: 4554e249-e00f-4668-9be3-da31ed200163
-trigger:
-  branches:
-    include:
-    - main
+- name: serviceConnection
+  value: 'ado-sp'
+# trigger:
+#   branches:
+#     include:
+#     - main
 stages:
-- stage: __default
+- stage: BuildAndPush
   jobs:
-  - job: Job
+  - job: BuildAndPush
+    displayName: 'Build and Push'
     pool:
       vmImage: ubuntu-latest
     steps:
@@ -23,31 +24,31 @@ stages:
   #   inputs:
   #     versionSpec: '10.x'
   #     displayName: 'Install Node.js'
-    - task: CmdLine@2
-      displayName: npm install
-      inputs:
-        script: |
-          npm install -g @angular/cli
-          npm install
-    - task: CmdLine@2
-      displayName: ng build
-      inputs:
-        script: |
-          set PATH=%PATH%;%CD%\node_modules\.bin;C:\npm\prefix
-          ng build --subresource-integrity --output-hashing none
-    - task: AzureFileCopy@2
-      displayName: Deploy Files
-      inputs:
-        SourcePath: '$(System.DefaultWorkingDirectory)\dist\$(Build.Repository.Name)'
-        azureSubscription: $(subscription)
-        Destination: 'AzureBlob'
-        storage: $(storageContainer)
-        ContainerName: '$web'
-        BlobPrefix: ''
-    - task: AzureCLI@2
-      displayName: Delete Old Files
-      inputs:
-        azureSubscription: $(subscription)
-        scriptType: 'pscore'
-        scriptLocation: 'inlineScript'
-        inlineScript: 'az storage blob delete-batch -s `$web --account-name $(storageContainer) --if-unmodified-since $(Get-Date ((Get-Date).addMinutes(-5)) -UFORMAT +%Y-%m-%dT%H:%MZ)'
+    # - task: CmdLine@2
+    #   displayName: npm install
+    #   inputs:
+    #     script: |
+    #       npm install -g @angular/cli
+    #       npm install
+    # - task: CmdLine@2
+    #   displayName: ng build
+    #   inputs:
+    #     script: |
+    #       set PATH=%PATH%;%CD%\node_modules\.bin;C:\npm\prefix
+    #       ng build --subresource-integrity --output-hashing none
+    # - task: AzureFileCopy@2
+    #   displayName: Deploy Files
+    #   inputs:
+    #     SourcePath: '$(System.DefaultWorkingDirectory)\dist\$(Build.Repository.Name)'
+    #     azureSubscription: $(serviceConnection)
+    #     Destination: 'AzureBlob'
+    #     storage: $(storageContainer)
+    #     ContainerName: '$web'
+    #     BlobPrefix: ''
+    # - task: AzureCLI@2
+    #   displayName: Delete Old Files
+    #   inputs:
+    #     azureSubscription: $(serviceConnection)
+    #     scriptType: 'pscore'
+    #     scriptLocation: 'inlineScript'
+    #     inlineScript: 'az storage blob delete-batch -s `$web --account-name $(storageContainer) --if-unmodified-since $(Get-Date ((Get-Date).addMinutes(-5)) -UFORMAT +%Y-%m-%dT%H:%MZ)'
