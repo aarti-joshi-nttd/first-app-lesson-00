@@ -26,12 +26,11 @@ stages:
           npm config set legacy-peer-deps true
           npm install -g @angular/cli
           npm install
-    # - task: CmdLine@2
-    #   displayName: ng build
-    #   inputs:
-    #     script: |
-    #       set PATH=%PATH%;%CD%\node_modules\.bin;C:\npm\prefix
-    #       ng build --subresource-integrity --output-hashing none
+    - task: CmdLine@2
+      displayName: ng build
+      inputs:
+        script: |
+          npm run build
     # - task: AzureFileCopy@2
     #   displayName: Deploy Files
     #   inputs:
