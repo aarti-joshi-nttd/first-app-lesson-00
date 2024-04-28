@@ -12,8 +12,7 @@ stages:
   jobs:
   - job: BuildAndPush
     displayName: 'Build and Push'
-    pool:
-      vmImage: container-pool
+    pool: 'container-pool'
     steps:
     - task: NodeTool@0
       inputs:
