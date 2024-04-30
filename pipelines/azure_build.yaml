@@ -43,9 +43,12 @@ stages:
       displayName: upload files to storage account
       inputs:
         script: |
-          cd '$(System.DefaultWorkingDirectory)\dist\$(Build.Repository.Name)'
           pwd
-          az storage azcopy blob upload --container $web --account-name  $(storageContainer) --source '$(System.DefaultWorkingDirectory)\dist\$(Build.Repository.Name)' --only-show-errors
+          ls
+          cd '$(System.DefaultWorkingDirectory)/dist/$(Build.Repository.Name)'
+          pwd
+          ls
+          az storage azcopy blob upload --container '$web' --account-name  $(storageContainer) --source '$(System.DefaultWorkingDirectory)/dist/$(Build.Repository.Name)' --only-show-errors
 
     # - task: AzureFileCopy@2
     #   displayName: Deploy Files
