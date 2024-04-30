@@ -14,24 +14,23 @@ stages:
     displayName: 'Build and Push'
     pool: 'container-pool'
     steps:
-    # - task: NodeTool@0
-    #   inputs:
-    #     versionSpec: '22.0.0'
-    #     force32bit: false
-    #     displayName: 'Install Node.js'
-    # - task: CmdLine@2
-    #   displayName: npm install
-    #   inputs:
-    #     script: |
-    #       npm config set legacy-peer-deps true
-    #       npm install -g @angular/cli
-    #       npm install
-    # - task: CmdLine@2
-    #   displayName: ng build
-    #   inputs:
-    #     script: |
-    #       npm run build
-    
+    - task: NodeTool@0
+      inputs:
+        versionSpec: '22.0.0'
+        force32bit: false
+        displayName: 'Install Node.js'
+    - task: CmdLine@2
+      displayName: npm install
+      inputs:
+        script: |
+          npm config set legacy-peer-deps true
+          npm install -g @angular/cli
+          npm install
+    - task: CmdLine@2
+      displayName: ng build
+      inputs:
+        script: |
+          npm run build
     - task: CmdLine@2
       displayName: install az-cli
       inputs:
