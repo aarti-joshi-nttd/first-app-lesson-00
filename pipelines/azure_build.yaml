@@ -59,4 +59,4 @@ stages:
         azureSubscription: $(serviceConnection)
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
-        inlineScript: az storage blob delete-batch -s '$web' --account-name $(storageContainer) --if-unmodified-since $(Get-Date ((Get-Date).addMinutes(-5)) -UFORMAT +%Y-%m-%dT%H:%MZ)
+        inlineScript: az storage blob delete-batch -s '$web' --account-name $(storageContainer) --if-unmodified-since $(date -u -d "5 minutes ago" +%Y-%m-%dT%H:%MZ)
