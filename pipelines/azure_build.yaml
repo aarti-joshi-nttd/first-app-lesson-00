@@ -38,16 +38,24 @@ stages:
         script: |
           curl -sL https://aka.ms/InstallAzureCLIDeb | bash
           az --version
-
-    - task: AzureFileCopy@2
-      displayName: Deploy Files
+    
+    - task: CmdLine@2
+      displayName: upload files to storage account
       inputs:
-        SourcePath: '$(System.DefaultWorkingDirectory)\dist\$(Build.Repository.Name)'
-        azureSubscription: $(serviceConnection)
-        Destination: 'AzureBlob'
-        storage: $(storageContainer)
-        ContainerName: '$web'
-        BlobPrefix: ''
+        script: |
+          cd '$(System.DefaultWorkingDirectory)\dist\$(Build.Repository.Name)'
+          pwd
+          az storage azcopy blob upload --container $web --account-name  $(storageContainer) --source '$(System.DefaultWorkingDirectory)\dist\$(Build.Repository.Name)' --only-show-errors
+
+    # - task: AzureFileCopy@2
+    #   displayName: Deploy Files
+    #   inputs:
+    #     SourcePath: '$(System.DefaultWorkingDirectory)\dist\$(Build.Repository.Name)'
+    #     azureSubscription: $(serviceConnection)
+    #     Destination: 'AzureBlob'
+    #     storage: $(storageContainer)
+    #     ContainerName: '$web'
+    #     BlobPrefix: ''
     # - task: AzureCLI@2
     #   displayName: Delete Old Files
     #   inputs:
