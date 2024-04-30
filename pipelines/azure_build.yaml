@@ -50,21 +50,13 @@ stages:
           cd '$(System.DefaultWorkingDirectory)/dist'
           pwd
           ls
-          az storage azcopy blob upload --container '$web' --account-name  $(storageContainer) --source '$(System.DefaultWorkingDirectory)/dist' --only-show-errors --recursive
+          az storage azcopy blob upload --container '$web' --account-name  $(storageContainer) --source '$(System.DefaultWorkingDirectory)/dist/*' --only-show-errors --recursive
 
-    # - task: AzureFileCopy@2
-    #   displayName: Deploy Files
-    #   inputs:
-    #     SourcePath: '$(System.DefaultWorkingDirectory)\dist\$(Build.Repository.Name)'
-    #     azureSubscription: $(serviceConnection)
-    #     Destination: 'AzureBlob'
-    #     storage: $(storageContainer)
-    #     ContainerName: '$web'
-    #     BlobPrefix: ''
-    # - task: AzureCLI@2
-    #   displayName: Delete Old Files
-    #   inputs:
-    #     azureSubscription: $(serviceConnection)
-    #     scriptType: 'pscore'
-    #     scriptLocation: 'inlineScript'
-    #     inlineScript: 'az storage blob delete-batch -s `$web --account-name $(storageContainer) --if-unmodified-since $(Get-Date ((Get-Date).addMinutes(-5)) -UFORMAT +%Y-%m-%dT%H:%MZ)'
+
+    - task: AzureCLI@2
+      displayName: Delete Old Files
+      inputs:
+        azureSubscription: $(serviceConnection)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: 'az storage blob delete-batch -s `$web --account-name $(storageContainer) --if-unmodified-since $(Get-Date ((Get-Date).addMinutes(-5)) -UFORMAT +%Y-%m-%dT%H:%MZ)'
