@@ -39,6 +39,7 @@ stages:
           az --version
     
     - task: AzureCLI@2
+      displayName: Upload files to container
       inputs:
         azureSubscription: $(serviceConnection)
         scriptType: 'bash'
@@ -49,7 +50,7 @@ stages:
           cd '$(System.DefaultWorkingDirectory)/dist'
           pwd
           ls
-          az storage azcopy blob upload --container '$web' --account-name  $(storageContainer) --source '$(System.DefaultWorkingDirectory)/dist' --only-show-errors
+          az storage azcopy blob upload --container '$web' --account-name  $(storageContainer) --source '$(System.DefaultWorkingDirectory)/dist' --only-show-errors --recursive
 
     # - task: AzureFileCopy@2
     #   displayName: Deploy Files
