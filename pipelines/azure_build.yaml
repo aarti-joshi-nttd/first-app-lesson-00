@@ -38,13 +38,15 @@ stages:
           curl -sL https://aka.ms/InstallAzureCLIDeb | bash
           az --version
     
-    - task: CmdLine@2
-      displayName: upload files to storage account
+    - task: AzureCLI@2
       inputs:
-        script: |
+        azureSubscription: $(serviceConnection)
+        scriptType: 'bash'
+        scriptLocation: inlineScript
+        inlineScript: |
           pwd
           ls
-          cd '$(System.DefaultWorkingDirectory)/dist/$(Build.Repository.Name)'
+          cd '$(System.DefaultWorkingDirectory)/dist'
           pwd
           ls
           az storage azcopy blob upload --container '$web' --account-name  $(storageContainer) --source '$(System.DefaultWorkingDirectory)/dist' --only-show-errors
